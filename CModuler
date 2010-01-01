@@ -1,0 +1,26 @@
+########################################################
+# These are the operations required to generate the module
+########################################################
+
+string( TOUPPER ${CMODULER_MODULE_NAME} CMODULER_MODULE_NAME_UPPERCASE )
+
+if( CMODULER_HEADER_FILES_PATH_SUFFIXES )
+  set( CMODULER_HEADER_FILES_PATH_SUFFIXES_AND_KEYWORD "PATH_SUFFIXES ${CMODULER_HEADER_FILES_PATH_SUFFIXES}" )
+endif( CMODULER_HEADER_FILES_PATH_SUFFIXES )
+
+if( CMODULER_LIBRARY_RELEASE_PATH_SUFFIXES )
+  set( CMODULER_LIBRARY_RELEASE_PATH_SUFFIXES_AND_KEYWORD "PATH_SUFFIXES ${CMODULER_LIBRARY_RELEASE_PATH_SUFFIXES}" )
+endif( CMODULER_LIBRARY_RELEASE_PATH_SUFFIXES )
+
+if( CMODULER_LIBRARY_DEBUG_PATH_SUFFIXES )
+  set( CMODULER_LIBRARY_DEBUG_PATH_SUFFIXES_AND_KEYWORD "PATH_SUFFIXES ${CMODULER_LIBRARY_DEBUG_PATH_SUFFIXES}" )
+endif( CMODULER_LIBRARY_DEBUG_PATH_SUFFIXES )
+
+file( MAKE_DIRECTORY ${cmodulergenerationstep_BINARY_DIR}/test ${cmodulergenerationstep_BINARY_DIR}/test/build )
+configure_file( ${cmodulergenerationstep_SOURCE_DIR}/FindModule.cmake.cmoduler ${cmodulergenerationstep_BINARY_DIR}/test/Find${CMODULER_MODULE_NAME}.cmake @ONLY)
+configure_file( ${cmodulergenerationstep_SOURCE_DIR}/CMakeLists.txt.cmoduler ${cmodulergenerationstep_BINARY_DIR}/test/CMakeLists.txt @ONLY)
+
+if( NOT NO_TEST )
+execute_process( COMMAND ${CMAKE_COMMAND} .. 
+		 WORKING_DIRECTORY ${cmodulergenerationstep_BINARY_DIR}/test/build )
+endif( NOT NO_TEST )
